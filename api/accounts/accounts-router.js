@@ -11,10 +11,10 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   // DO YOUR MAGIC
   await Account.getAll()
-    .then(accounts => {
-      res.json(accounts)
+    .then((accounts) => {
+      res.json(accounts);
     })
-    .catch(next)
+    .catch(next);
 });
 
 router.get("/:id", checkAccountId, async (req, res, next) => {
@@ -26,34 +26,42 @@ router.get("/:id", checkAccountId, async (req, res, next) => {
     .catch(next);
 });
 
-router.post("/", checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
-  // DO YOUR MAGIC
-  await Account.create(req.body)
-    .then(account => {
-      res.status(201).json(account)
-    })
-    .catch(next)
-});
+router.post(
+  "/",
+  checkAccountPayload,
+  checkAccountNameUnique,
+  async (req, res, next) => {
+    // DO YOUR MAGIC
+    try {
+      const newAccount = await Account.create(req.body);
+      res.status(201).json(newAccount);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
-router.put("/:id",
- checkAccountId, 
- checkAccountPayload, 
- async (req, res, next) => {
-  // DO YOUR MAGIC
-  await Account.updateById(req.params.id, req.body)
-    .then(UpdatedAccount => {
-      res.json(UpdatedAccount)
-    })
-    .catch(next)
-});
+router.put(
+  "/:id",
+  checkAccountId,
+  checkAccountPayload,
+  async (req, res, next) => {
+    // DO YOUR MAGIC
+    await Account.updateById(req.params.id, req.body)
+      .then((UpdatedAccount) => {
+        res.json(UpdatedAccount);
+      })
+      .catch(next);
+  }
+);
 
-router.delete("/:id", checkAccountId,async (req, res, next) => {
+router.delete("/:id", checkAccountId, async (req, res, next) => {
   // DO YOUR MAGIC
   await Account.deleteById(req.params.id)
-    .then(deletedAccount => {
-      res.json(deletedAccount)
+    .then((deletedAccount) => {
+      res.json(deletedAccount);
     })
-    .catch(next)
+    .catch(next);
 });
 
 router.use((err, req, res, next) => {

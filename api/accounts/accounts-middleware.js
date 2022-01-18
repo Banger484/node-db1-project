@@ -6,7 +6,7 @@ async function checkAccountPayload(req, res, next) {
   // Note: you can either write "manual" validation logic
   // or use the Yup library (not currently installed)
   const { name, budget } = req.body;
-  if (!name || !budget) {
+  if (!name || !budget ) {
     res.status(400).json({
       message: "name and budget are required",
     });
@@ -18,7 +18,7 @@ async function checkAccountPayload(req, res, next) {
     res.status(400).json({
       message: "budget of account is too large or too small",
     });
-  } else if (isNaN(budget) === true) {
+  } else if (isNaN(budget)) {
     res.status(400).json({
       message: "budget of account must be a number",
     });
@@ -38,6 +38,7 @@ async function checkAccountNameUnique(req, res, next) {
         message: "that name is taken",
       });
     } else {
+      req.body.name = req.body.name.trim();
       next();
     }
   } catch (err) {
